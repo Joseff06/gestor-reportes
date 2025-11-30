@@ -1,6 +1,8 @@
-# Gestor de Reportes — Microservicio Híbrido (FastAPI + SQL + NoSQL)
+# Gestor de Reportes — Microservicio Híbrido (FastAPI + PostgreSQL + MongoDB)
 
 API de inteligencia de negocio encargada de consolidar información. Implementa el patrón de **Persistencia Políglota**, cruzando datos relacionales de empleados (`PostgreSQL`) con datos transaccionales de pedidos (`MongoDB`) para generar dashboards en tiempo real.
+
+---
 
 ## Tabla de contenidos
 
@@ -10,53 +12,9 @@ API de inteligencia de negocio encargada de consolidar información. Implementa 
 - [Requisitos](#requisitos)
 - [Instalación y ejecución (desarrollo)](#instalación-y-ejecución-desarrollo)
 - [Configuración](#configuración)
-- [Infraestructura de Datos (Docker)](#infraestructura-de-datos-docker)
-- [Documentación de la API](#documentación-de-la-api)
-- [Despliegue sugerido](#despliegue-sugerido)
-- [Contribuir](#contribuir)
-- [Licencia y Contacto](#licencia-y-contacto)
-
----
-
-## Características
-
-- Dashboard operativo de ventas por empleado.
-- Conexión dual asíncrona (SQL y NoSQL simultáneos).
-- Lectura de datos cruzada entre microservicios.
-- Endpoints documentados con OpenAPI/Swagger.
-
-## Tecnologías
-
-- `FastAPI` (API)
-- `SQLModel` (Conexión a PostgreSQL)
-- `Motor` (Driver asíncrono para MongoDB)
-- `PostgreSQL` (Base de datos relacional - Empleados)
-- `MongoDB` (Base de datos documental - Pedidos)
-- `uvicorn` (ASGI server)
-
-## Estructura del proyecto
-
-Raíz del servicio `microservicio-reportes`:
-
-```text
-main.py            # Lógica de negocio y endpoints
-# Gestor de Reportes — Microservicio Híbrido (FastAPI + PostgreSQL + MongoDB)
-
-Servicio responsable de consolidar datos relacionales y documentales (patrón de persistencia políglota) para generar dashboards y métricas operativas en tiempo real.
-
----
-
-## Tabla de contenidos
-
-- [Características](#caracter%C3%ADsticas)
-- [Tecnologías](#tecnolog%C3%ADas)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Requisitos](#requisitos)
-- [Instalación y ejecución (desarrollo)](#instalaci%C3%B3n-y-ejecuci%C3%B3n-desarrollo)
-- [Configuración](#configuraci%C3%B3n)
 - [Infraestructura de datos (Docker)](#infraestructura-de-datos-docker)
 - [Endpoints principales](#endpoints-principales)
-- [Documentación de la API](#documentaci%C3%B3n-de-la-api)
+- [Documentación de la API](#documentación-de-la-api)
 - [Despliegue sugerido](#despliegue-sugerido)
 - [Contribuir](#contribuir)
 - [Licencia y contacto](#licencia-y-contacto)
@@ -65,82 +23,94 @@ Servicio responsable de consolidar datos relacionales y documentales (patrón de
 
 ## Características
 
-- Dashboard operativo con métricas por empleado.
-- Integración asíncrona entre PostgreSQL y MongoDB.
-- Endpoints documentados con OpenAPI/Swagger.
+- Dashboard operativo con métricas de ventas por empleado.
+- Integración asíncrona entre `PostgreSQL` (empleados) y `MongoDB` (pedidos).
+- Lectura de datos cruzados entre microservicios (patrón de **persistencia políglota**).
+- Endpoints documentados automáticamente con OpenAPI/Swagger.
+- Preparado para generar dashboards y métricas en tiempo (casi) real.
+
+---
 
 ## Tecnologías
 
-- `FastAPI` (API)
-- `SQLModel` / `SQLAlchemy` (PostgreSQL)
-- `motor` (driver asíncrono para MongoDB)
-- `PostgreSQL` (datos de empleados)
-- `MongoDB` (datos de pedidos)
-- `uvicorn` (ASGI server)
+- `FastAPI` — Framework principal de la API.
+- `SQLModel` / `SQLAlchemy` — Capa de acceso a datos para `PostgreSQL`.
+- `motor` — Driver asíncrono para `MongoDB`.
+- `PostgreSQL` — Base de datos relacional (datos de empleados).
+- `MongoDB` — Base de datos documental (datos de pedidos).
+- `uvicorn` — Servidor ASGI para ejecución de la API.
+
+---
 
 ## Estructura del proyecto
 
 Raíz del servicio `microservicio-reportes`:
 
-```
-main.py            # Lógica de negocio y endpoints
-database.py        # Configuración de conexiones (SQL + Mongo)
-requirements.txt   # Dependencias
-.env.example       # Variables de entorno de ejemplo
-README.md          # Documentación (este archivo)
-```
+```text
+microservicio-reportes/
+├── main.py          # Lógica de negocio y definición de endpoints
+├── database.py      # Configuración de conexiones (SQL + Mongo)
+├── requirements.txt # Dependencias del proyecto
+├── .env.example     # Variables de entorno de ejemplo
+└── README.md        # Documentación (este archivo)
 
-## Requisitos
 
-- `Python 3.10+`
-- `PostgreSQL` con los datos de empleados disponibles
-- `MongoDB` con los datos de pedidos disponibles
-- `pip` y `virtualenv` (recomendado)
+Requisitos
 
-## Instalación y ejecución (desarrollo)
+Python 3.10+
 
-1. Clonar el repositorio y entrar en el directorio del servicio:
+PostgreSQL con los datos de empleados disponibles
 
-```powershell
+MongoDB con los datos de pedidos disponibles
+
+pip y virtualenv (recomendado)
+
+Opcional: Docker y docker-compose para levantar la infraestructura de datos
+
+Instalación y ejecución (desarrollo)
+
+Clonar el repositorio y entrar en el directorio del servicio:
+
 git clone <URL_DEL_REPO>
 cd microservicio-reportes
-```
 
-2. Crear y activar un entorno virtual:
 
-```powershell
+Crear y activar un entorno virtual:
+
 python -m venv venv
 .\venv\Scripts\activate
-```
 
-3. Instalar dependencias:
 
-```powershell
+En Linux/macOS, la activación sería:
+
+source venv/bin/activate
+
+
+Instalar dependencias:
+
 pip install -r requirements.txt
-```
 
-4. Crear el archivo de configuración a partir del ejemplo:
 
-```powershell
+Crear el archivo de configuración a partir del ejemplo:
+
 copy .env.example .env
-```
 
-5. Ajustar `.
-.env` con las credenciales/hosts de tus bases de datos (ver sección "Configuración").
 
-6. Ejecutar la aplicación en modo desarrollo:
+Ajustar el archivo .env con las credenciales/hosts de tus bases de datos (ver sección Configuración
+).
 
-```powershell
+Ejecutar la aplicación en modo desarrollo:
+
 uvicorn main:app --reload --port 8002
-```
 
-La API estará disponible en `http://localhost:8002`.
 
-## Configuración
+La API estará disponible en:
+http://localhost:8002
 
-Editar el archivo `.env` (a partir de `.env.example`) y ajustar las variables de conexión:
+Configuración
 
-```
+Editar el archivo .env (creado a partir de .env.example) y ajustar las variables de conexión:
+
 # --- Base de Datos SQL (Empleados) ---
 SQL_USER=admin
 SQL_PASSWORD=password123
@@ -153,35 +123,46 @@ MONGO_HOST=127.0.0.1
 MONGO_PORT=27017
 MONGO_DB=inventory_db
 MONGO_COLLECTION=orders
-```
 
-Comprueba que los puertos y hosts coinciden con tus contenedores o instancias.
 
-## Infraestructura de datos (Docker)
+Asegúrate de que los puertos y hosts coinciden con tus contenedores o instancias de base de datos.
 
-Puedes levantar rápidamente ambas bases de datos para desarrollo:
+Infraestructura de datos (Docker)
 
-```powershell
-docker run -d --name postgres_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password123 -e POSTGRES_DB=empleados_db -p 5433:5432 postgres:15
-docker run -d --name mongo_db -p 27017:27017 mongo:7.0
-```
+Para levantar rápidamente ambas bases de datos en entorno de desarrollo:
 
-Si prefieres, puedo añadir un `docker-compose.yml` que orqueste ambos servicios junto con la API.
+docker run -d --name postgres_db \
+  -e POSTGRES_USER=admin \
+  -e POSTGRES_PASSWORD=password123 \
+  -e POSTGRES_DB=empleados_db \
+  -p 5433:5432 \
+  postgres:15
 
-## Endpoints principales
+docker run -d --name mongo_db \
+  -p 27017:27017 \
+  mongo:7.0
 
-- `GET /reportes/dashboard` — Devuelve el dashboard operativo consolidado.
+
+Opcional: se puede añadir un archivo docker-compose.yml para orquestar:
+
+postgres_db
+
+mongo_db
+
+microservicio-reportes (API)
+
+Endpoints principales
+
+GET /reportes/dashboard — Devuelve el dashboard operativo consolidado.
 
 Ejemplo (cURL):
 
-```bash
 curl -X GET "http://localhost:8002/reportes/dashboard" \
   -H "accept: application/json"
-```
+
 
 Respuesta de ejemplo:
 
-```json
 {
   "titulo": "Dashboard Operativo - Sprint 4",
   "metricas_globales": {
@@ -197,31 +178,75 @@ Respuesta de ejemplo:
     }
   ]
 }
-```
 
-## Documentación de la API
 
-FastAPI ofrece interfaces interactivas:
+Nota: La estructura exacta de la respuesta puede variar según el modelo de datos y la lógica implementada en main.py.
 
-- Swagger UI: `http://localhost:8002/docs`
-- ReDoc: `http://localhost:8002/redoc`
+Documentación de la API
 
-## Despliegue sugerido
+FastAPI expone automáticamente la documentación interactiva:
 
-Para producción:
+Swagger UI:
+http://localhost:8002/docs
 
-- Ejecutar la API en contenedores o detrás de un proxy (NGINX) y un proceso manager (ej. `gunicorn` con `uvicorn` workers).
-- Aislar la base de datos y restringir acceso (Security Groups / reglas de firewall).
-- Gestionar secretos mediante un gestor de secretos o variables de entorno seguras.
+ReDoc:
+http://localhost:8002/redoc
 
-## Contribuir
+Desde estas interfaces puedes probar los endpoints, ver esquemas de entrada/salida y explorar el modelo de datos.
 
-1. Fork del repositorio.
-2. Crear una rama `feature/...` o `fix/...`.
-3. Abrir un Pull Request con una descripción clara.
+Despliegue sugerido
 
-## Licencia y contacto
+Para un entorno de producción se recomienda:
 
-Indica aquí la licencia del proyecto (por ejemplo `MIT`) y los datos de contacto del mantenedor.
+Contenerizar la API (por ejemplo, con Docker) y correrla detrás de un proxy inverso (NGINX).
 
----
+Usar un process manager como gunicorn con workers uvicorn:
+
+gunicorn -k uvicorn.workers.UvicornWorker main:app
+
+
+Aislar las bases de datos en una red privada y restringir el acceso mediante:
+
+Security Groups (en la nube)
+
+Reglas de firewall
+
+Gestionar secretos (credenciales de DB, tokens, etc.) mediante:
+
+Variables de entorno seguras
+
+Gestores de secretos (AWS Secrets Manager, Vault, etc.)
+
+Configurar logs centralizados y monitoreo (Prometheus, Grafana, ELK, etc.)
+
+Contribuir
+
+Haz un fork del repositorio.
+
+Crea una rama para tu cambio:
+
+git checkout -b feature/mi-nueva-funcionalidad
+# o
+git checkout -b fix/correccion-bug-x
+
+
+Realiza tus cambios y confirma los commits con mensajes claros.
+
+Envía un Pull Request describiendo:
+
+El problema que se resuelve
+
+Los cambios realizados
+
+Cómo probarlos
+
+Licencia y contacto
+
+Licencia: MIT (o la que corresponda a tu proyecto).
+
+Mantenedor: [Nombre del mantenedor]
+
+Contacto: [correo@ejemplo.com
+]
+
+Actualiza esta sección con la información real de tu proyecto antes de publicarlo.
