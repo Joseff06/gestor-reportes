@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Entornos Virtuales (¡Muy importante!)
+# Entornos Virtuales 
 venv/
 env/
 .venv/

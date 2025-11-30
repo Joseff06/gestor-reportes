@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlmodel import create_engine, Session
 import motor.motor_asyncio
 
-# 1. Cargar variables del archivo .env
+#  Cargar variables del archivo .env
 load_dotenv()
 
 # --- CONFIGURACIÓN SQL (PostgreSQL) ---

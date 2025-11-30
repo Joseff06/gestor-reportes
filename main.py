@@ -12,7 +12,7 @@ async def dashboard_general(session: Session = Depends(get_sql_session)):
     2. Cruza datos con MongoDB (Puerto 27017).
     """
     
-    # --- PASO 1: Leer SQL (Usuarios) ---
+    # --- Leer SQL (Usuarios) ---
     try:
         # Traemos username y rol de la tabla usuario
         query = text("SELECT username, rol FROM usuario")
@@ -26,12 +26,12 @@ async def dashboard_general(session: Session = Depends(get_sql_session)):
     reporte_consolidado = []
     total_ventas_empresa = 0
 
-    # --- PASO 2: Cruzar con Mongo (Pedidos) ---
+    # ---  Cruzar con Mongo (Pedidos) ---
     for row in resultado_sql:
         username = row[0]
         rol = row[1]
         
-        # Consultamos a Mongo: "¿Cuántos pedidos tienen 'vendedor_id' == username?"
+        #  "¿Cuántos pedidos tienen 'vendedor_id' == username?"
         cantidad_pedidos = await pedidos_collection.count_documents({"vendedor_id": username})
         
         total_ventas_empresa += cantidad_pedidos
